@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz: Sustainability and Cost over the Product Life Cycle</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quick quiz on sustainability and cost over the product life cycle.">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Quick Quiz: <span>Sustainability and Life Cycle Cost</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>10 questions on <b>sustainability and cost over the product life cycle</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  { q: "The product life cycle covers:",
+    o: ["Only the manufacturing stage", "Only the time a customer uses the product", "Every stage from raw materials to end of life", "Only the time the product is on sale in shops"],
+    a: 2, why: "It covers all stages: raw materials, manufacture, packaging and distribution, use and reuse, and end of life." },
+  { q: "Which list shows the life cycle stages in the correct order?",
+    o: ["Raw materials, manufacture, packaging and distribution, use and reuse, end of life",
+        "Manufacture, raw materials, use and reuse, packaging and distribution, end of life",
+        "Use and reuse, raw materials, manufacture, end of life, packaging and distribution",
+        "Packaging and distribution, manufacture, raw materials, end of life, use and reuse"],
+    a: 0, why: "Materials are extracted first, then made into the product, shipped, used, and finally disposed of or recycled." },
+  { q: "Recycled aluminium needs about how much less energy than making new aluminium?",
+    o: ["About 5% less", "About 25% less", "About 50% less", "About 95% less"],
+    a: 3, why: "Melting scrap aluminium uses about 95% less energy than extracting new aluminium from bauxite." },
+  { q: "Flat-pack furniture is mainly a sustainability improvement at which stage?",
+    o: ["Raw materials", "Manufacture", "Packaging and distribution", "End of life"],
+    a: 2, why: "Flat-pack items take less space, so many more fit in one lorry, cutting transport fuel and packaging." },
+  { q: "Which design choice helps most at the END OF LIFE stage?",
+    o: ["Easy disassembly with every material marked", "Gluing all the parts permanently together", "Mixing many plastics in one part", "Using a thinner cardboard box"],
+    a: 0, why: "Parts that come apart easily and are labelled can be sorted and recycled cheaply." },
+  { q: "Life cycle cost is:",
+    o: ["The purchase price only", "Purchase price + running cost + maintenance + disposal", "The running cost only", "The selling price minus the profit"],
+    a: 1, why: "It is the total cost of owning a product over its whole life, not just the price you pay at the shop." },
+  { q: "An LED bulb costs about 4 times more to buy than an incandescent bulb. Over 15,000 hours, the LED costs:",
+    o: ["More than the incandescent bulbs", "About the same", "About 6 times less", "About twice as much"],
+    a: 2, why: "The LED uses 9 W instead of 60 W and lasts 15 times longer, so it costs about LKR 4,650 against LKR 29,250." },
+  { q: "A designer spends more at the design stage so materials can be separated easily. Where is money saved later?",
+    o: ["At end of life, through cheaper recycling", "In advertising", "In the shop price", "Nowhere, it is only extra cost"],
+    a: 0, why: "Extra design cost is paid back by lower recycling costs at the end of the product's life." },
+  { q: "What does the \"carbon footprint\" of a product mean?",
+    o: ["The carbon dioxide absorbed by trees", "The total greenhouse gases released over the product's life", "The amount of carbon in its materials", "The weight of carbon fibre used to make it"],
+    a: 1, why: "It counts emissions from every life cycle stage, so designers can reduce it at any stage." },
+  { q: "EU law requires at least what share of a car's weight to be reused or recovered at end of life?",
+    o: ["50%", "75%", "85%", "95%"],
+    a: 3, why: "The End-of-Life Vehicles Directive sets 95% reused or recovered. 85% is the separate target for reuse and recycling." },
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [];
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the life cycle slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  i = 0; score = 0; answers = [];
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = [];
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>
