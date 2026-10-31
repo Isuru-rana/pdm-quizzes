@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz: Equipment and System Level</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quiz on equipment level and system level constraints and opportunities.">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Quiz: <span>Equipment and System Level</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>50 questions on <b>equipment level and system level constraints and opportunities</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  { q: "Equipment level means looking at:",
+    o: ["One component, machine or device", "How the product is advertised", "The company's finances", "The whole factory and all its machines"],
+    a: 0, why: "Equipment level is the scope of one part, such as a motor, pump or sensor." },
+  { q: "System level means looking at:",
+    o: ["One part on its own", "Only the cheapest part", "Only the software", "Many components working together to do a job"],
+    a: 3, why: "System level is the complete setup, where many parts work together to achieve a function." },
+  { q: "Which of these is an EQUIPMENT level example?",
+    o: ["A manufacturing line", "A power distribution system", "A pump", "A vehicle braking system"],
+    a: 2, why: "A pump is one piece of equipment. The others are systems made of many parts." },
+  { q: "Which of these is a SYSTEM level example?",
+    o: ["A gearbox", "A sensor", "A battery", "An automated packaging line"],
+    a: 3, why: "A packaging line has many machines working together. The others are single items of equipment." },
+  { q: "Which question is asked at SYSTEM level?",
+    o: ["What is this motor's maximum torque?", "How hot does this sensor get?", "Does one component limit the whole system?", "What is this battery's capacity?"],
+    a: 2, why: "System level looks at how parts interact and whether one part holds the rest back." },
+  { q: "Which question is asked at EQUIPMENT level?",
+    o: ["What are the limits of this machine?", "Does the whole line meet its output target?", "How do all the parts interact?", "How does the full process perform?"],
+    a: 0, why: "Equipment level asks what one item can do, what its limits are and how it can be improved." },
+  { q: "Why do engineers need to think about levels?",
+    o: ["Because systems never fail", "So they can skip testing", "Because every product has exactly two levels", "To know where a problem or advantage actually exists"],
+    a: 3, why: "If you know the level, you can fix the right thing in the right place." },
+  { q: "In design, a constraint is:",
+    o: ["A limitation the design must work within", "A type of machine", "A chance to improve the product", "A sales target"],
+    a: 0, why: "Constraints are limits such as budget, size, mass, standards and law." },
+  { q: "In design, an opportunity is:",
+    o: ["A possibility for improvement", "A safety standard", "A legal limit", "A broken part"],
+    a: 0, why: "Opportunities are chances to improve, often from new technology, materials or markets." },
+  { q: "Constraints and opportunities come from which factors?",
+    o: ["Only the customer's colour choice", "Technical, economic, regulatory and environmental", "Only technical", "Only economic"],
+    a: 1, why: "The introduction listed all four: technical, economic, regulatory and environmental." },
+  { q: "Tuk-tuk EV conversion: which is an EQUIPMENT level question?",
+    o: ["Does the heavy battery change the vehicle's stability?", "Must the vehicle be re-approved?", "Is the battery capacity enough for the daily range?", "Will the brakes cope with the extra mass?"],
+    a: 2, why: "Battery capacity is about one part. The others are effects on the whole vehicle." },
+  { q: "Tuk-tuk EV conversion: which is a SYSTEM level effect?",
+    o: ["The motor's rated power", "The controller's current rating", "The heavy battery moves the centre of gravity", "The battery's kWh rating"],
+    a: 2, why: "Centre of gravity is a property of the whole vehicle, so it is a system level effect." },
+  { q: "In the tuk-tuk, the battery management system (BMS) is which kind of interface?",
+    o: ["Mechanical", "Structural", "Software", "Hydraulic"],
+    a: 2, why: "The BMS and controller settings are software interfaces." },
+  { q: "In the tuk-tuk, the motor mount and drive to the rear axle are which kind of interface?",
+    o: ["Mechanical", "Software", "Electrical", "Hydraulic"],
+    a: 0, why: "Mounts, shafts and drives are mechanical interfaces." },
+  { q: "Which is an OPPORTUNITY created by the tuk-tuk EV conversion?",
+    o: ["Lower running cost and no fuel queues", "Re-approval paperwork", "Extra mass on the brakes", "A higher centre of gravity"],
+    a: 0, why: "Running cost, quieter operation, solar charging and new local workshops are opportunities. The others are constraints." },
+  { q: "Which is an example of a design constraint?",
+    o: ["Charging from rooftop solar", "Using lighter materials to save fuel", "Maximum mass or size for an aircraft part", "Making a design open source"],
+    a: 2, why: "A mass or size limit restricts the design, so it is a constraint." },
+  { q: "Meeting ISO 9001 and SLS (Sri Lanka Standards) is an example of:",
+    o: ["A marketing opportunity only", "A tooling cost", "An equipment interface", "A quality and safety constraint"],
+    a: 3, why: "Standards set rules the design and its manufacture must follow." },
+  { q: "The Sapugaskanda refinery can process about:",
+    o: ["50,000 barrels of crude oil per day", "5,000 barrels per day", "500,000 barrels per day", "5 million barrels per day"],
+    a: 0, why: "Its capacity is about 50,000 barrels per day." },
+  { q: "About how much of Sri Lanka's fuel demand does Sapugaskanda meet?",
+    o: ["About 5%", "About 30%", "About 100%", "About 75%"],
+    a: 1, why: "It meets only about 30%. The rest is imported as finished fuel, which costs more foreign exchange." },
+  { q: "Why did the Sapugaskanda refinery shut down in 2022?",
+    o: ["There was too much local oil", "It switched to solar power", "The refinery was too new", "The country could not afford to buy crude oil"],
+    a: 3, why: "The refinery runs only on imported crude, so the foreign exchange crisis stopped it." },
+  { q: "What opportunity is planned for the Sapugaskanda refinery?",
+    o: ["Close it and import all fuel", "Convert it into a car factory", "Run it only at weekends", "Expand to about 100,000 barrels per day to cut fuel imports"],
+    a: 3, why: "Doubling capacity would reduce the need for expensive imported finished fuel." },
+  { q: "What was wrong with the GM ignition switch?",
+    o: ["It was too expensive", "It was too hard to turn", "It needed too little turning force, so it could slip to OFF", "It used the wrong colour plastic"],
+    a: 2, why: "The low torque failed GM's own specification. A heavy key ring or a knee could turn it off." },
+  { q: "When the GM ignition switch slipped to OFF, what was lost?",
+    o: ["Nothing important", "Power steering, power-brake assist and airbag deployment", "Only the radio", "Only the headlights"],
+    a: 1, why: "With the engine off, key safety systems stopped working. That is how one part affected the whole car." },
+  { q: "Why was the GM fix hard to trace?",
+    o: ["The supplier went bankrupt", "The part was never redesigned", "The part had no number", "The 2006 redesign kept the same part number"],
+    a: 3, why: "Old and new switches looked the same on paper, so nobody could easily tell which cars had the faulty one." },
+  { q: "Takata airbag inflators used which propellant?",
+    o: ["Water", "Compressed air", "Petrol", "Ammonium nitrate"],
+    a: 3, why: "Ammonium nitrate was chosen, unlike the more stable chemicals rivals used." },
+  { q: "Why did Takata choose ammonium nitrate?",
+    o: ["It was the safest option", "The law required it", "Cheaper, smaller and less smoke", "Customers asked for it"],
+    a: 2, why: "It was chosen for cost and size, not for long-term stability." },
+  { q: "What made the Takata propellant burn too fast?",
+    o: ["Low tyre pressure", "Years of heat and humidity", "Using the wrong fuel in the car", "Being too cold"],
+    a: 1, why: "Heat and humidity over many years change the propellant. Hot, humid places carry the most risk." },
+  { q: "The Takata case shows:",
+    o: ["A system that had no equipment", "An equipment level failure that caused a system level crisis", "A failure that only affected one car", "A purely software failure"],
+    a: 1, why: "One small part, the inflator, failed inside the airbag systems of about 100 million cars." },
+  { q: "Takata paid a USD 1 billion penalty in 2017 mainly for:",
+    o: ["Falsifying test data", "Bad advertising", "Using too much steel", "Late deliveries"],
+    a: 0, why: "Hiding test results turned an engineering defect into a crime." },
+  { q: "Why are Takata airbags an extra risk in Sri Lanka?",
+    o: ["It is too cold for airbags", "Hot, humid climate and many reconditioned imports that miss the recall", "All Sri Lankan cars were fixed first", "Sri Lanka has no cars with airbags"],
+    a: 1, why: "Recalls run in the country of first sale, so imported used cars often never get the fix." },
+  { q: "Which is an example of an OPPORTUNITY?",
+    o: ["Using lightweight materials to improve fuel efficiency", "A strict budget limit", "A new safety law you must meet", "A maximum size limit"],
+    a: 0, why: "Lighter materials are a chance to improve performance. The others are constraints." },
+  { q: "Designing modular systems is an opportunity because it:",
+    o: ["Stops all failures", "Removes the need for standards", "Always makes the product heavier", "Makes maintenance easier and lowers life cycle cost"],
+    a: 3, why: "Modules can be swapped and repaired, which saves time and money over the product's life." },
+  { q: "COVID-19 ventilators: why did Penlon succeed?",
+    o: ["It adapted an existing approved design", "It made the cheapest possible design", "It designed a brand new machine from nothing", "It ignored approval rules"],
+    a: 0, why: "Approval was the biggest constraint. Starting from an approved design got it approved in about 3 weeks." },
+  { q: "What happened to Dyson's new CoVent ventilator?",
+    o: ["It was never designed", "It was approved in one day", "It was still waiting for approval when demand fell, so the order was cancelled", "It became the main NHS ventilator"],
+    a: 2, why: "A brand new design takes longer to approve, so the regulatory constraint worked against it." },
+  { q: "Apollo Guidance Computer: which opportunity made it possible?",
+    o: ["Steam power", "Larger and heavier parts", "Vacuum tubes", "New integrated circuits (silicon chips)"],
+    a: 3, why: "Integrated circuits gave compact, low-power logic that fitted the strict mass and size limits." },
+  { q: "Apollo bought about 60% of US integrated circuits in 1963. What was the effect?",
+    o: ["Chip prices rose forever", "Chip prices fell and the IC industry grew", "Nothing changed", "Chips became illegal"],
+    a: 1, why: "Big demand drove prices down. A project's constraint created an opportunity for a whole industry." },
+  { q: "Which is NOT one of the four equipment level key areas?",
+    o: ["Equipment interfaces", "Systems integration compromises", "Marketing and advertising", "Cost-effective manufacture"],
+    a: 2, why: "The four areas are interfaces, integration compromises, equipment PDS and cost-effective manufacture." },
+  { q: "Hydraulic interfaces are good for large force in a small space, but:",
+    o: ["They only carry data", "They can leak", "They never need maintenance", "They cannot carry force"],
+    a: 1, why: "Pipes, hoses and fittings can leak, which needs maintenance and inspection." },
+  { q: "What is the main risk with software interfaces?",
+    o: ["Mismatches are hidden and hard to see", "They rust", "They are very heavy", "They leak oil"],
+    a: 0, why: "Data formats, protocols and file versions can mismatch without anyone noticing until something fails." },
+  { q: "What caused the Airbus A380 wiring problem?",
+    o: ["The engines were too big", "Teams used different versions of the CATIA design software", "The wires were the wrong colour", "The factory ran out of copper"],
+    a: 1, why: "CATIA V4 and V5 data did not transfer properly, so harnesses were built too short." },
+  { q: "In systems integration, EMC (electromagnetic compatibility) means:",
+    o: ["Parts must be made of metal", "One device must not interfere with another", "The system must be cheap", "Every part must be the same colour"],
+    a: 1, why: "Electrical equipment can create interference. EMC makes sure devices work together without upsetting each other." },
+  { q: "Electrical bonding (earthing) is used to:",
+    o: ["Glue parts together", "Make the product lighter", "Increase the price", "Prevent static, shocks and interference"],
+    a: 3, why: "Bonding connects metal parts to a common earth for safety and to reduce interference." },
+  { q: "Boeing 737 MAX: what did the MCAS software rely on?",
+    o: ["GPS only", "Three independent sensors", "A single angle-of-attack sensor", "The pilot's phone"],
+    a: 2, why: "Relying on one sensor created a single point of failure at system level." },
+  { q: "Why did the 737 MAX need MCAS at all?",
+    o: ["The paint was too thick", "The seats were too heavy", "Larger engines mounted further forward changed how the aircraft pitched", "The wings were too long"],
+    a: 2, why: "An equipment change (bigger engines) forced an integration compromise, which software tried to patch." },
+  { q: "If a piece of equipment falls short of its PDS, the shortfall can be absorbed at system level. The cost is:",
+    o: ["Extra mass, space and money", "A lower price", "Only a change of colour", "Nothing, it is always free"],
+    a: 0, why: "Examples are extra cooling, shielding or an enclosure. Each adds mass, takes space and costs money." },
+  { q: "How was the Boeing 787 battery problem fixed?",
+    o: ["Nothing was changed", "The batteries were removed completely", "Pilots carried fire extinguishers only", "A stainless-steel enclosure with a vent pipe to the outside"],
+    a: 3, why: "The system absorbed the equipment problem, adding about 68 kg per aircraft." },
+  { q: "In manufacturing, tooling means:",
+    o: ["The software licence", "Moulds, dies, jigs and fixtures made for one specific part", "The workers' hand tools only", "The factory building"],
+    a: 1, why: "Tooling is made for one part, so its cost is spread over how many parts you make." },
+  { q: "High capital outlay and tooling give a low cost per part only when:",
+    o: ["The part is very small", "Production volume is high", "The factory is very old", "Only one part is made"],
+    a: 1, why: "The big fixed cost is shared across many parts, so the cost per part falls as volume rises." },
+  { q: "Tesla's Giga Press replaced about 70 parts with 1 or 2 castings. Why was it cost-effective for Tesla?",
+    o: ["The press is very cheap", "Tesla builds hundreds of thousands of cars", "Tesla builds only a few cars", "The moulds never need changing"],
+    a: 1, why: "The press and moulds cost millions, which only pays off at very high volume." },
+  { q: "Sri Lanka blackout, 9 Feb 2025: what is the main lesson?",
+    o: ["One equipment level fault can trip a whole system", "Rooftop solar never helps the grid", "Monkeys always cause blackouts", "Each part only matters on its own"],
+    a: 0, why: "A fault at one substation led to the whole national grid tripping. How parts interact matters." },
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [];
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the equipment and system level slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  i = 0; score = 0; answers = [];
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = [];
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>
