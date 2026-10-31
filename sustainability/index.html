@@ -108,7 +108,7 @@
   </header>
 
   <section id="start" class="card intro">
-    <p>10 questions on <b>sustainability and cost over the product life cycle</b>.</p>
+    <p>25 questions on <b>sustainability and cost over the product life cycle</b>.</p>
     <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
     <label for="name">Your name</label>
     <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
@@ -171,6 +171,51 @@ const QUESTIONS = [
   { q: "EU law requires at least what share of a car's weight to be reused or recovered at end of life?",
     o: ["50%", "75%", "85%", "95%"],
     a: 3, why: "The End-of-Life Vehicles Directive sets 95% reused or recovered. 85% is the separate target for reuse and recycling." },
+  { q: "Which is a sustainability issue at the RAW MATERIALS stage?",
+    o: ["Mining and oil extraction use energy and damage land", "Packaging waste from shipping", "Old batteries thrown into landfill", "Electricity used while charging"],
+    a: 0, why: "Getting materials out of the ground uses energy, damages land and uses up resources that run out." },
+  { q: "Which issue belongs to the MANUFACTURE stage?",
+    o: ["Fuel used by delivery lorries", "Scrap, emissions and waste water from the factory", "Batteries ending up in landfill", "A product that breaks after one year"],
+    a: 1, why: "Making the product uses energy and creates scrap, emissions and waste water." },
+  { q: "A factory regrinds plastic sprues from injection moulding and reuses them. Which stage does this improve?",
+    o: ["Raw materials", "Manufacture", "Use and reuse", "End of life"],
+    a: 1, why: "Reusing offcuts and sprues cuts scrap in the factory, which is the manufacture stage." },
+  { q: "Refillable ink-tank printers replace throwaway cartridges. Which stage does this improve?",
+    o: ["Raw materials", "Manufacture", "Use and reuse", "Packaging and distribution"],
+    a: 2, why: "Refilling instead of replacing cuts waste while the product is in use." },
+  { q: "Plastic parts marked with recycling codes 1 to 7 help most at which stage?",
+    o: ["Raw materials", "Manufacture", "Use and reuse", "End of life"],
+    a: 3, why: "The codes tell recyclers which plastic each part is, so they can sort it at end of life." },
+  { q: "Which is NOT a way to improve the use and reuse stage?",
+    o: ["Design the product to be repaired", "Design the product to be upgraded", "Design the product to be refilled", "Design the product to be thrown away after one use"],
+    a: 3, why: "Single-use design shortens the product's life. Repair, upgrade and refill all extend it." },
+  { q: "How much energy does a 60 W bulb use in 1,000 hours?",
+    o: ["6 kWh", "60 kWh", "600 kWh", "60,000 kWh"],
+    a: 1, why: "60 W x 1,000 h = 60,000 Wh, which is 60 kWh." },
+  { q: "A 9 W LED runs for 15,000 hours (135 kWh). At LKR 30 per kWh, what is its running cost?",
+    o: ["LKR 405", "LKR 1,350", "LKR 4,050", "LKR 40,500"],
+    a: 2, why: "135 kWh x LKR 30 = LKR 4,050." },
+  { q: "Each incandescent bulb lasts 1,000 hours. How many are needed for 15,000 hours?",
+    o: ["1", "5", "15", "150"],
+    a: 2, why: "15,000 / 1,000 = 15 bulbs, so the cheap bulb is bought many times." },
+  { q: "Using recycled PET (rPET) for drink bottles mainly:",
+    o: ["Cuts new plastic made from oil and saves energy", "Always makes the bottle cheaper to buy", "Makes the bottle much heavier", "Stops the bottle from being recycled again"],
+    a: 0, why: "rPET reduces demand for new plastic and uses less energy. It is not always cheaper than new PET." },
+  { q: "Why is a bottle made from one plastic, with an easy-peel label, better for sustainability?",
+    o: ["It is easier to sort and recycle at end of life", "It looks brighter on the shop shelf", "It holds more water", "It is cheaper to advertise"],
+    a: 0, why: "One material and a removable label mean the bottle can be recycled without sorting mixed plastics." },
+  { q: "In Sri Lanka, the Central Environmental Authority bans polythene thinner than:",
+    o: ["5 microns", "20 microns", "100 microns", "1 millimetre"],
+    a: 1, why: "Polythene below 20 microns is banned because it tears easily and is hard to collect and recycle." },
+  { q: "Which is an example of COMMERCIAL pressure to be more sustainable?",
+    o: ["A government ban on a material", "Customers choosing greener products", "A product safety standard", "A factory inspection"],
+    a: 1, why: "Environmentally conscious customers buy greener products, so companies compete on sustainability." },
+  { q: "Which is a LEGAL reason for a manufacturer to be more sustainable?",
+    o: ["Laws such as plastic bans or the EU end-of-life vehicle rules", "Good online reviews", "A better brand image", "Staff who want to help the planet"],
+    a: 0, why: "Laws force companies to act. The other options are commercial or moral reasons." },
+  { q: "Why should sustainability be planned at the DESIGN stage?",
+    o: ["Design choices fix the materials, processes and end of life options", "Design is the most expensive stage", "Laws only apply to designers", "Nothing can change after a product is sold"],
+    a: 0, why: "The European Commission estimates that about 80% of a product's environmental impact is decided at the design stage." },
 ];
 
 const $ = id => document.getElementById(id);
