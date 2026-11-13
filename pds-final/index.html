@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final Quiz: Writing a PDS</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quick quiz on the product design specification (PDS).">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Final Quiz: <span>Writing a PDS</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>20 questions on <b>turning a brief into measurable PDS lines, PDS headings and testing</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const QUIZ_ID = "pds-final";
+
+const QUESTIONS = [
+  { q: "What is the correct order?",
+    o: ["Brief, PDS, design, check the design against the PDS", "Design, PDS, brief, check", "PDS, brief, check, design", "Design, check, brief, PDS"],
+    a: 0, why: "The PDS is written before the design. Then the design is checked against it." },
+  { q: "Which requirement is measurable?",
+    o: ["Easy to use", "Very strong", "Holds a 12 kg bag", "Good quality"],
+    a: 2, why: "A measurable line has a number and a unit." },
+  { q: "\"The hook must be cheap.\" Which is the best PDS version?",
+    o: ["As cheap as possible", "Cost should be low", "Cheaper than expected", "No more than LKR 250 per hook"],
+    a: 3, why: "A number with a unit can be checked. The others cannot." },
+  { q: "The school has LKR 100,000 for 400 hooks. What is the cost limit per hook?",
+    o: ["LKR 25", "LKR 400", "LKR 250", "LKR 2,500"],
+    a: 2, why: "100,000 divided by 400 is 250." },
+  { q: "Every PDS line needs:",
+    o: ["A material, a process and a machine", "A price, a brand and a slogan", "A number with a unit, a source and a test", "A sketch, a colour and a logo"],
+    a: 2, why: "Each line must be measurable, show where it came from and say how it is checked." },
+  { q: "In a PDS, the \"source\" of a line is:",
+    o: ["Where the requirement came from, such as the client's brief", "The factory that makes the product", "The shop that sells the product", "The person who drew the sketch"],
+    a: 0, why: "Every requirement should be traced back to the brief, data or a standard." },
+  { q: "Which line does NOT belong in a PDS because it is a design decision?",
+    o: ["Holds a 12 kg bag", "No rust after 5 years indoors", "No more than 150 g per hook", "Made from 3 mm stainless steel bent into a J shape"],
+    a: 3, why: "The PDS says what the product must achieve. The shape and material are chosen later by the designer." },
+  { q: "Why should a PDS not say how the product is built?",
+    o: ["Because it makes the PDS too short", "So the designer is free to find the best solution", "Because the client does not care", "Because drawings are not allowed in engineering"],
+    a: 1, why: "Any design that meets every PDS line is acceptable." },
+  { q: "The tuk-tuk handlebar tube is 22 to 25 mm across. Which is the best PDS line?",
+    o: ["Uses a rubber-lined steel clamp", "Has a strong clamp", "Fits most handlebars", "Clamps firmly onto tubes from 22 to 25 mm in diameter"],
+    a: 3, why: "It uses the client's numbers and does not pick a solution." },
+  { q: "42% of drivers said their phone fell out. In the PDS, this data is used as:",
+    o: ["A manufacturing process", "The source for a requirement that the phone stays in place", "A reason to stop the project", "A design drawing"],
+    a: 1, why: "Client data is a source. It shows which requirements matter most." },
+  { q: "Handlebars reach 70 °C in the sun. Which is the best PDS line?",
+    o: ["Must survive hot weather", "Should not melt easily", "Made from heat-proof plastic", "No cracks or softening after 8 hours at 70 °C"],
+    a: 3, why: "It has a number, a unit and a test, and it does not name the material." },
+  { q: "\"Each holder must cost no more than LKR 500 to make.\" Which PDS heading is this?",
+    o: ["Cost", "Ergonomics", "Maintenance", "Aesthetics"],
+    a: 0, why: "A limit on the cost to make belongs under Cost." },
+  { q: "\"5,000 holders first, then 20,000 a year.\" Which PDS heading is this?",
+    o: ["Quantity", "Safety", "Finish", "Weight"],
+    a: 0, why: "The number to be made belongs under Quantity." },
+  { q: "\"The client has its own injection moulding machines.\" Which PDS heading is this?",
+    o: ["Competition", "Market", "Manufacturing facility", "Carbon footprint"],
+    a: 2, why: "It describes the equipment available to make the product." },
+  { q: "\"The company wants to reduce plastic waste.\" Which PDS heading is this?",
+    o: ["Testing", "Quantity", "Sustainability", "Usability"],
+    a: 2, why: "Reducing waste is a sustainability requirement." },
+  { q: "\"A driver can fit it without tools in under 2 minutes.\" Which PDS heading is this?",
+    o: ["Cost", "Usability", "Materials", "Reliability"],
+    a: 1, why: "It is about how easy the product is to use." },
+  { q: "How would you test the line \"holds a 12 kg bag\"?",
+    o: ["Check the colour of the hook", "Ask students if the hook looks strong", "Weigh the hook on a scale", "Hang a heavier load, such as 20 kg, for 24 hours and measure any bend"],
+    a: 3, why: "A load test with a safety margin proves the requirement." },
+  { q: "Why is every PDS line numbered (P1, P2, P3...)?",
+    o: ["To make the PDS look longer", "So each line can be checked and referred to in the design", "Because the client pays per line", "To show the order of manufacture"],
+    a: 1, why: "Numbers let you label design features with the PDS line they meet." },
+  { q: "After the design is finished, what do you do with the PDS?",
+    o: ["Check that the design meets every line", "Throw it away", "Give it to the sales team only", "Rewrite it to match the design"],
+    a: 0, why: "The PDS is the checklist for the final design." },
+  { q: "Which document lets another factory make an exact copy of the product?",
+    o: ["The PDS", "The technical drawing", "The design brief", "The client's letter"],
+    a: 1, why: "The PDS says what the product must achieve. The drawing gives the exact shape and sizes." }
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0;
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: QUESTIONS.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "1" : "0").join(""),
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent."; })
+    .catch(() => { el.textContent = "Could not send your score. Show this screen instead."; });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the PDS slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+  pdmSend();
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt = 1;
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt++;
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Quiz: Design Briefs</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quick quiz on the product design specification (PDS).">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Quick Quiz: <span>Design Briefs</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>20 questions on <b>what a design brief is, its 7 key features and how to state a need, not a solution</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const QUIZ_ID = "design-brief";
+
+const QUESTIONS = [
+  { q: "What is a design brief?",
+    o: ["A test report on the final product", "A price list from a supplier", "A document that sets out the objectives, scope and requirements of a design project", "A finished technical drawing of the product"],
+    a: 2, why: "A design brief outlines the objectives, scope and requirements of a design project." },
+  { q: "A design brief acts as:",
+    o: ["A replacement for testing", "A legal patent for the product", "A guiding framework for designers and engineers", "A sales advert for customers"],
+    a: 2, why: "It gives the team clear direction so the final product meets its purpose." },
+  { q: "Which of these is NOT a key feature of a design brief?",
+    o: ["Target audience", "Constraints", "Final technical drawings", "Problem statement"],
+    a: 2, why: "Drawings come much later. The brief has the problem, objectives, audience, constraints, opportunities, requirements and evaluation criteria." },
+  { q: "The problem statement tells the designer:",
+    o: ["Which material to use", "What problem the product must solve", "What colour the logo is", "How many screws are needed"],
+    a: 1, why: "The problem statement explains why the product is needed." },
+  { q: "The target audience is:",
+    o: ["The machines used to make the product", "The people who will use the product", "The people who work in the factory", "The companies that sell raw materials"],
+    a: 1, why: "The target audience is the group of users the product is designed for." },
+  { q: "In a design brief, constraints are:",
+    o: ["The results of product testing", "Limits the design must work within, such as budget and regulations", "The names of the design team", "Extra ideas that could add value"],
+    a: 1, why: "Constraints are limits such as budget, manufacturing and regulations." },
+  { q: "In a design brief, opportunities are:",
+    o: ["Extra ideas that could add value to the product", "Limits that the design cannot break", "Mistakes made in the last design", "Faults found during testing"],
+    a: 0, why: "Opportunities are chances to add value, such as using solar energy." },
+  { q: "Evaluation criteria tell us:",
+    o: ["Which factory will make the product", "What the product will be called", "Who will pay for the project", "How we will judge if the design is a success"],
+    a: 3, why: "Evaluation criteria say how the finished design will be judged." },
+  { q: "A brief 'prevents scope creep'. This means:",
+    o: ["It stops the project growing beyond what was agreed", "It makes the product smaller", "It keeps the design secret", "It stops the product from rusting"],
+    a: 0, why: "With a clear brief, new demands are not added without agreement." },
+  { q: "A client says only: \"I need a boat.\" Why is this not enough to start a design?",
+    o: ["The client did not choose a colour", "A boat does not need a brief", "It does not say who will use it, where, or how much they can spend", "Boats cannot be designed by engineers"],
+    a: 2, why: "The designer must ask questions to find the real need first." },
+  { q: "Which is the best first question to ask the client?",
+    o: ["Which brand of motor do you want?", "Do you like the colour blue?", "Which glue should we use?", "What problem are you trying to solve?"],
+    a: 3, why: "Start with the problem. The solution comes later." },
+  { q: "Which line belongs in a design brief for a boat?",
+    o: ["Works in fresh water and salt water", "Use 8 mm stainless steel bolts", "Use a fibreglass hull", "Fit a 2 kW electric motor"],
+    a: 0, why: "A brief states the need. The other lines pick a solution too early." },
+  { q: "\"Use an electric motor with a battery.\" Why should this NOT be in a design brief?",
+    o: ["It picks the solution too early", "It is too short", "Electric motors are not allowed on boats", "It has no brand name"],
+    a: 0, why: "The brief should say the need, such as quiet with low running cost. The designer picks the solution." },
+  { q: "\"Handrails and a non-slip floor\" is a solution. Which need is behind it?",
+    o: ["Easy to store", "Low price", "Modern look", "Safe for beginners and children"],
+    a: 3, why: "The need is safety. Handrails are only one way to meet it." },
+  { q: "In the boat brief, \"retail price no more than Rs. 500,000\" is a:",
+    o: ["Problem statement", "Constraint", "Opportunity", "Target audience"],
+    a: 1, why: "A budget is a limit, so it is a constraint." },
+  { q: "In the boat brief, \"use solar energy\" is listed as:",
+    o: ["A constraint", "A regulation", "A problem statement", "An opportunity"],
+    a: 3, why: "It is an extra idea that could add value, so it is an opportunity." },
+  { q: "\"A beginner can use it safely after a short demonstration.\" In the boat brief this is:",
+    o: ["A manufacturing process", "An evaluation criterion", "A trademark", "A material choice"],
+    a: 1, why: "It is a way to judge if the design is a success." },
+  { q: "A farmer says: \"Damp air brings fungus.\" Which is the best line for the brief?",
+    o: ["Install two 12 V exhaust fans", "Fit a DHT22 humidity sensor", "Use an ESP32 controller", "Keeps the air from getting too damp"],
+    a: 3, why: "State the need. Sensors, fans and controllers are solutions for the designer to choose later." },
+  { q: "Which document is written after the design brief?",
+    o: ["The user manual", "The patent", "The Product Design Specification (PDS)", "The sales invoice"],
+    a: 2, why: "The brief becomes a PDS, then the design starts." },
+  { q: "What is the main difference between a brief and a PDS?",
+    o: ["The brief states needs. The PDS gives each need a number, a unit and a test", "The brief is longer than the PDS", "The PDS is written by the client", "There is no difference"],
+    a: 0, why: "Example: 'two adults can move it' becomes 'mass no more than 80 kg'." }
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0;
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: QUESTIONS.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "1" : "0").join(""),
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent."; })
+    .catch(() => { el.textContent = "Could not send your score. Show this screen instead."; });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the design brief slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+  pdmSend();
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt = 1;
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt++;
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>

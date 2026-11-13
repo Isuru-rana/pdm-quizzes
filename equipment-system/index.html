@@ -129,6 +129,7 @@
     <div class="big" id="final"></div>
     <div class="msg" id="msg"></div>
     <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
     <div class="review" id="review"></div>
     <button class="btn ghost" id="again">Try again</button>
   </section>
@@ -136,7 +137,10 @@
   <footer>Show your score screen to your lecturer if asked.</footer>
 </div>
 
+<script src="../config.js"></script>
 <script>
+const QUIZ_ID = "equipment-system";
+
 const QUESTIONS = [
   { q: "Equipment level means looking at:",
     o: ["One component, machine or device", "How the product is advertised", "The company's finances", "The whole factory and all its machines"],
@@ -292,7 +296,7 @@ const QUESTIONS = [
 
 const $ = id => document.getElementById(id);
 const LETTERS = "ABCD";
-let i = 0, score = 0, name = "", answers = [];
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0;
 
 function show(id) {
   ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
@@ -341,6 +345,21 @@ function choose(k) {
   next.focus({ preventScroll: true });
 }
 
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: QUESTIONS.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "1" : "0").join(""),
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent."; })
+    .catch(() => { el.textContent = "Could not send your score. Show this screen instead."; });
+}
+
 function finish() {
   $("bar").style.width = "100%";
   $("who").textContent = name || "Your score";
@@ -360,11 +379,13 @@ function finish() {
     rv.appendChild(d);
   });
   show("done");
+  pdmSend();
 }
 
 $("go").addEventListener("click", () => {
   name = $("name").value.trim();
-  i = 0; score = 0; answers = [];
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt = 1;
   show("quiz");
   render();
 });
@@ -376,7 +397,7 @@ $("next").addEventListener("click", () => {
   if (i < QUESTIONS.length) render(); else finish();
 });
 $("again").addEventListener("click", () => {
-  i = 0; score = 0; answers = [];
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt++;
   show("quiz");
   render();
 });

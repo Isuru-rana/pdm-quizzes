@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Quiz: Regulatory Factors</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quick quiz on the product design specification (PDS).">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Quick Quiz: <span>Regulatory Factors</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>20 questions on <b>regulatory factors, why compliance matters and compliance in a PDS</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const QUIZ_ID = "regulatory";
+
+const QUESTIONS = [
+  { q: "Regulatory factors are:",
+    o: ["Rules, laws, standards and policies set by authorities", "The prices set by competitors", "Ideas from the marketing team", "The colours chosen by the designer"],
+    a: 0, why: "They are set by authorities and control how organisations operate." },
+  { q: "Regulatory factors change depending on:",
+    o: ["The day of the week", "The product type, the industry and the target market", "The size of the company logo", "The designer's favourite colour"],
+    a: 1, why: "A medical device and a toy face different rules, and rules differ between countries." },
+  { q: "Which is NOT a reason why compliance matters?",
+    o: ["It gives market access", "It makes the product heavier", "It protects reputation", "It avoids legal penalties"],
+    a: 1, why: "Compliance avoids penalties, protects reputation and allows market access." },
+  { q: "Which of these are legal penalties for non-compliance?",
+    o: ["Patents, trademarks and copyright", "Sketches, models and drawings", "Fines, recalls and lawsuits", "Discounts, gifts and awards"],
+    a: 2, why: "Breaking regulations can lead to fines, product recalls or lawsuits." },
+  { q: "\"Market access\" means:",
+    o: ["A product is free to enter any market", "A product must be advertised online", "A product that does not comply can be blocked from being sold in a market", "A product must be sold in a supermarket"],
+    a: 2, why: "Non-compliance can block entry to key markets." },
+  { q: "Compliance protects reputation because:",
+    o: ["It removes the need for testing", "It lowers the product weight", "It hides faults from customers", "It keeps the trust of customers"],
+    a: 3, why: "Customers trust products that meet the rules." },
+  { q: "The MV X-Press Pearl disaster in 2021 happened:",
+    o: ["In the port of Singapore", "Off the coast of Colombo, Sri Lanka", "In the Suez Canal", "Off the coast of Japan"],
+    a: 1, why: "The ship caught fire off Colombo in May 2021." },
+  { q: "In the X-Press Pearl case, which kind of regulation was broken?",
+    o: ["Environmental and pollution regulations", "Copyright regulations", "Trademark regulations", "Advertising regulations"],
+    a: 0, why: "Hazardous cargo leaked and plastic pellets polluted the sea." },
+  { q: "Which Sri Lankan authority acted on the X-Press Pearl pollution?",
+    o: ["Marine Environment Protection Authority (MEPA)", "Department of Motor Traffic", "National Medicines Regulatory Authority (NMRA)", "Sri Lanka Tea Board"],
+    a: 0, why: "MEPA is responsible for marine pollution." },
+  { q: "Safety standards exist to:",
+    o: ["Make products cheaper to advertise", "Help companies copy designs", "Keep users and the environment safe", "Make products look modern"],
+    a: 2, why: "Safety standards ensure user and environmental safety." },
+  { q: "Environmental regulations aim to:",
+    o: ["Remove the need for recycling", "Make packaging larger", "Increase the use of hazardous materials", "Promote sustainability and reduce harm to the environment"],
+    a: 3, why: "They promote sustainability and eco-friendly products." },
+  { q: "Industry-specific standards are:",
+    o: ["Standards with no legal meaning", "Rules written by one customer", "Standards that apply only to logos", "Standards made for one sector, such as automotive or healthcare"],
+    a: 3, why: "Each sector has its own standards." },
+  { q: "Why is intellectual property a regulatory factor in design?",
+    o: ["The design must not infringe another company's patents or trademarks", "Trademarks replace safety standards", "Every design must copy a patent", "Patents make testing unnecessary"],
+    a: 0, why: "Designers must check they are not infringing existing IP." },
+  { q: "Ethical and social responsibility includes:",
+    o: ["Hiding where materials come from", "Using the cheapest labour at any cost", "Ignoring local culture", "Fair labour practices"],
+    a: 3, why: "It covers fair labour practices and cultural sensitivity." },
+  { q: "\"Cradle to gate\" means:",
+    o: ["From use until disposal", "From the shop to the customer's home", "From raw material extraction until the product leaves the factory", "From design sketch to first prototype"],
+    a: 2, why: "It covers raw materials through to the factory gate." },
+  { q: "In Sri Lanka, which body regulates medical devices such as thermometers?",
+    o: ["Sri Lanka Cricket", "Board of Investment", "Marine Environment Protection Authority (MEPA)", "National Medicines Regulatory Authority (NMRA)"],
+    a: 3, why: "Medical devices must be registered with the NMRA." },
+  { q: "ISO 13485 is a standard for:",
+    o: ["Paint colours", "Road signs", "Quality management of medical devices", "Boat engines"],
+    a: 2, why: "ISO 13485 is the quality management system standard for medical devices." },
+  { q: "By regulation, the label of a medical thermometer must include:",
+    o: ["Instructions and safety warnings", "The designer's home address", "A list of rival products", "The price of raw materials"],
+    a: 0, why: "Labels must carry the legally required information, such as instructions and warnings." },
+  { q: "\"Integrating compliance into the PDS\" means:",
+    o: ["Leaving regulations to the sales team", "Putting regulatory requirements into the PDS from the start", "Removing standards to save time", "Fixing legal problems after the product is on sale"],
+    a: 1, why: "The product is designed to comply from the beginning, not fixed later." },
+  { q: "Which is a good compliance line in a PDS for a medical thermometer?",
+    o: ["Make it as accurate as possible", "Accuracy: within ±0.1 °C", "Accuracy will be checked later", "It should be quite accurate"],
+    a: 1, why: "A PDS line needs a number and a unit so it can be tested." }
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0;
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: QUESTIONS.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "1" : "0").join(""),
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent."; })
+    .catch(() => { el.textContent = "Could not send your score. Show this screen instead."; });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the regulatory factors slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+  pdmSend();
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt = 1;
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt++;
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>
