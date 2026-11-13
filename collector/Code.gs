@@ -3,7 +3,7 @@
 // Deploy > New deployment > Web app > Execute as: Me, Who has access: Anyone.
 // Put the web app URL into config.js (window.PDM_ENDPOINT).
 
-const HEADERS = ["Time", "Name", "Score", "Total", "Percent", "Attempt", "Seconds", "Marks (1 = right)", "Picked"];
+const HEADERS = ["Time", "Name", "Score", "Total", "Percent", "Attempt", "Seconds", "Marks (Y = right)", "Picked"];
 
 function clean(v, max) {
   let s = String(v == null ? "" : v).slice(0, max);
