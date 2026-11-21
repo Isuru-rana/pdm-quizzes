@@ -113,6 +113,9 @@
   .task ul { padding-left: 20px; margin: 8px 0; }
   .check { display: flex; gap: 10px; align-items: center; font-weight: 600; margin-top: 14px; cursor: pointer; }
   .check input { width: 22px; height: 22px; accent-color: var(--teal); }
+  textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px; border: 2px solid var(--line); border-radius: 10px; background: #fff; resize: vertical; }
+  textarea:focus { outline: none; border-color: var(--teal); }
+  .wnote { font-size: 13px; color: var(--muted); margin-top: 6px; }
   .model { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: var(--good-bg); color: #1b4d1e; font-size: 15px; display: none; }
   .model.show { display: block; }
   .model ul { margin: 6px 0 0; padding-left: 20px; }
@@ -141,19 +144,19 @@
   <section id="start" class="card intro">
     <p>Hi everyone. I am running a little late today, so I want you to start this activity on your own while I get there.</p>
     <p>It brings together everything we have covered so far, from <b>design triggers</b> to <b>IPR</b>, using a real product from a past Pearson assignment. Work on your own. This is an individual activity, not a group task.</p>
-    <p>You will need <b>paper and a pen</b>. Four of the tasks are written by hand, just like Part B of your real assignment, where you cannot use a computer.</p>
+    <p>Four of the tasks ask for a <b>written answer</b>. Type your answer in the box. You can plan it on paper first, just like Part B of your real assignment.</p>
     <p style="margin:0 0 4px"><b>What you will do:</b></p>
     <table class="plan">
       <tr><td>Read the client brief</td></tr>
       <tr><td>Part 1: Design triggers</td></tr>
       <tr><td>Part 2: Design challenges</td></tr>
-      <tr><td>Part 3: Equipment and system level, then a paper task</td></tr>
+      <tr><td>Part 3: Equipment and system level, then a written task</td></tr>
       <tr><td>Part 4: Customer, brief and PDS</td></tr>
-      <tr><td>Part 5: Protecting your design (IPR), then a paper task</td></tr>
-      <tr><td>Part 6: Write a PDS (paper)</td></tr>
-      <tr><td>Part 7: Explain the triggers (paper)</td></tr>
+      <tr><td>Part 5: Protecting your design (IPR), then a written task</td></tr>
+      <tr><td>Part 6: Write a PDS (written)</td></tr>
+      <tr><td>Part 7: Explain the triggers (written)</td></tr>
     </table>
-    <p style="margin-top:12px">Your score is sent to me at the end. Keep your paper answers. I will check them when I arrive.</p>
+    <p style="margin-top:12px">All your answers are recorded and sent to me, including your written answers.</p>
     <label for="name">Your name</label>
     <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
     <button class="btn" id="go">Start: read the brief</button>
@@ -174,10 +177,10 @@
     <p class="ctx hidden" id="ctx"></p>
     <div class="opts" id="opts"></div>
     <div class="task hidden" id="task"></div>
-    <label class="check hidden" id="checkwrap"><input type="checkbox" id="done-paper"> I have written my answer on paper</label>
+    <div class="hidden" id="checkwrap"><label for="wtext">Your answer</label><textarea id="wtext" rows="9" maxlength="3000" placeholder="Type your answer here"></textarea><div class="wnote" id="wnote">Write your answer, then you can see the model answer.</div></div>
     <div class="model" id="model"></div>
     <div class="feedback" id="fb"></div>
-    <button class="btn hidden" id="reveal" disabled>Show the model answer</button>
+    <button class="btn hidden" id="reveal" disabled>Submit my answer and show the model answer</button>
     <button class="btn hidden" id="next">Next</button>
   </section>
 
@@ -290,7 +293,7 @@ const ITEMS = [
     o: ["The cost of the bracket's paint colour", "The cost of the microswitch", "Tooling and set up cost", "The cost of the machine bed"],
     a: 2, why: "Expensive moulds or press tools are not worth it for 5 parts. Choose processes with low tooling and set up cost." },
   { p: P3, type: "write",
-    q: "On paper: the bracket's interfaces.",
+    q: "Written task: the bracket's interfaces.",
     task: "<p>The bracket connects to the rest of the machine in three ways. For <b>each</b> interface below, write:</p>" +
           "<ul><li><b>what</b> it connects to</li><li><b>one way it limits</b> your redesign</li></ul>" +
           "<ul><li>Mechanical</li><li>Electrical</li><li>Software</li></ul>" +
@@ -343,10 +346,10 @@ const ITEMS = [
     o: ["Show it first, then patent it later", "Apply for the patent before showing it", "Register a trademark only", "Nothing, the trade fair protects it"],
     a: 1, why: "A patent needs the invention to be new. If you show it in public first, it may no longer count as new." },
   { p: P5, type: "write",
-    q: "On paper: an IPR plan for the StopSure bracket.",
-    task: "<p>Copy this table onto paper and fill it in. Use what you learned in the IPR lesson.</p>" +
+    q: "Written task: an IPR plan for the StopSure bracket.",
+    task: "<p>For each item below, write: the type of IPR, how you get it and how long it lasts. Use what you learned in the IPR lesson.</p>" +
           "<ul><li>The new spring and damper mechanism</li><li>The distinctive shape</li><li>The name StopSure and its logo</li><li>The CAD drawings and instruction sheet</li><li>The secret surface treatment recipe</li></ul>" +
-          "<p>Columns: <b>Item</b> | <b>Type of IPR</b> | <b>How you get it</b> | <b>How long it lasts</b></p>" +
+          "<p>Example layout: <b>Item: type of IPR, how you get it, how long it lasts</b></p>" +
           "<p>Then answer: should the company patent the surface treatment or keep it secret? Give one reason.</p>",
     model: "<b>Model answer:</b><ul>" +
            "<li><b>Mechanism:</b> patent. Apply, and it must be new. Up to 20 years.</li>" +
@@ -358,7 +361,7 @@ const ITEMS = [
 
   // Part 6 and 7: paper tasks
   { p: P6, type: "write",
-    q: "On paper: write a PDS for the new bracket.",
+    q: "Written task: write a PDS for the new bracket.",
     task: "<p>Write <b>at least 8 PDS lines</b>, one under each heading below. Use the brief. Every line must be <b>measurable</b> or checkable: use a number, a limit or a clear test.</p>" +
           "<ul><li>Performance</li><li>Adjustment</li><li>Fit and interfaces</li><li>Materials</li><li>Life and reliability</li><li>Quantity and manufacturing</li><li>Safety</li><li>Sustainability</li></ul>" +
           "<p>Example of a weak line: \"The bracket should be strong.\" Make every line better than that.</p>",
@@ -373,7 +376,7 @@ const ITEMS = [
            "<li><b>Sustainability:</b> made from a recyclable material, with the stop replaceable without replacing the whole bracket.</li>" +
            "</ul><p style=\"margin-top:8px\">Check yours: does each line have a number, a limit or a test? If not, improve it now.</p>" },
   { p: P7, type: "write",
-    q: "On paper: explain two design triggers for this redesign.",
+    q: "Written task: explain two design triggers for this redesign.",
     task: "<p>For <b>each</b> trigger, write:</p><ul><li>the name of the trigger</li><li>what in the brief shows it</li><li>how your new design will respond to it</li></ul>" +
           "<p>Then name <b>one design challenge</b> (from Part 2) that the redesign also meets, and say why.</p>",
     model: "<b>Model answer (your wording can differ):</b><ul>" +
@@ -419,8 +422,9 @@ function render() {
   if (isWrite) {
     $("task").innerHTML = item.task;
     $("model").innerHTML = item.model;
-    $("done-paper").checked = false;
+    $("wtext").value = ""; $("wtext").disabled = false;
     $("reveal").disabled = true;
+    $("wnote").textContent = "Write your answer, then you can see the model answer.";
   } else {
     item.o.forEach((text, k) => {
       const b = document.createElement("button");
@@ -459,6 +463,27 @@ function showNext() {
   next.focus({ preventScroll: true });
 }
 
+async function sendWritten(item, text) {
+  const url = window.PDM_ENDPOINT, el = $("wnote");
+  if (!url) { el.textContent = "Saved on this screen."; return; }
+  el.textContent = "Sending your answer...";
+  const parts = [];
+  for (let k = 0; k < text.length; k += 195) parts.push(text.slice(k, k + 195));
+  try {
+    for (let k = 0; k < parts.length; k++) {
+      await fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ quiz: QUIZ_ID + "-written", name, score: 0, total: 1, attempt,
+          seconds: Math.round((Date.now() - t0) / 1000),
+          marks: item.p.split(":")[0] + " (" + (k + 1) + "/" + parts.length + ")",
+          picked: parts[k] }) });
+    }
+    item.sent = true;
+    el.textContent = "Your answer was sent to me.";
+  } catch (e) {
+    el.textContent = "Could not send your answer. Show me this screen when I arrive.";
+  }
+}
+
 function pdmSend() {
   const url = window.PDM_ENDPOINT, el = $("sent");
   if (!url) { el.textContent = ""; return; }
@@ -466,7 +491,7 @@ function pdmSend() {
   const body = JSON.stringify({
     quiz: QUIZ_ID, name, score, total: MC.length, attempt,
     seconds: Math.round((Date.now() - t0) / 1000),
-    marks: answers.map(a => a.ok ? "Y" : "N").join("") + " paper:" + writes + "/4",
+    marks: answers.map(a => a.ok ? "Y" : "N").join("") + " written:" + writes + "/4",
     picked: answers.map(a => LETTERS[a.picked]).join("")
   });
   fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
@@ -491,7 +516,7 @@ function finish() {
     const d = document.createElement("div");
     if (item.type === "write") {
       d.className = "pp";
-      d.textContent = `${item.p}: written on paper. Keep it for me to check.`;
+      d.textContent = `${item.p}: written answer ${item.sent ? "sent" : "not sent"}.`;
     } else {
       const a = answers[n++];
       d.className = a.ok ? "ok" : "no";
@@ -520,16 +545,22 @@ $("tobegin").addEventListener("click", () => {
   show("quiz");
   render();
 });
-$("done-paper").addEventListener("change", e => { $("reveal").disabled = !e.target.checked; });
+$("wtext").addEventListener("input", e => {
+  const n = e.target.value.trim().length;
+  $("reveal").disabled = n < 30;
+  $("wnote").textContent = n < 30 ? "Write a little more before you submit." : "Ready to submit.";
+});
 $("reveal").addEventListener("click", () => {
   writes++;
+  const item = ITEMS[i];
+  item.sent = false;
+  sendWritten(item, $("wtext").value.trim());
+  $("wtext").disabled = true;
   $("model").classList.add("show");
   $("reveal").classList.add("hidden");
-  $("done-paper").disabled = true;
   showNext();
 });
 $("next").addEventListener("click", () => {
-  $("done-paper").disabled = false;
   i++;
   if (i < ITEMS.length) render(); else finish();
 });
