@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Quiz: Market Analysis</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: quick quiz on environmental constraints, health and safety, and security.">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 8px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Quick Quiz: <span>Market Analysis</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>15 questions on <b>environmental constraints, health and safety, and security</b>.</p>
+    <p>Tap an answer. You will see straight away if it is right, with a short reason.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start quiz</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <p class="q" id="question" tabindex="-1"></p>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="next">Next question</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try again</button>
+  </section>
+
+  <footer>Show your score screen to your lecturer if asked.</footer>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const QUIZ_ID = "market-analysis";
+
+const QUESTIONS = [
+  { q: "What is a Unique Selling Point (USP)?",
+    o: ["The lowest price in the shop", "The one thing that makes a product stand out from its competitors", "The date a product goes on sale", "A list of all the parts"],
+    a: 1, why: "A USP is what makes customers choose this product over the others." },
+  { q: "Which is the best example of a USP?",
+    o: ["A vacuum cleaner that never loses suction because it has no bag", "A vacuum cleaner that is grey", "A vacuum cleaner with a plug", "A vacuum cleaner sold in a box"],
+    a: 0, why: "Every vacuum has a plug and a box. No loss of suction makes it stand out." },
+  { q: "A FEATURE of a product is:",
+    o: ["What the user gains from it", "The price the customer pays", "What the product has or does", "Who buys the product"],
+    a: 2, why: "A feature is a fact about the product, for example a 5000 mAh battery." },
+  { q: "A BENEFIT of a product is:",
+    o: ["The size of the box", "The factory where it is made", "The number of screws", "What the user gains from a feature"],
+    a: 3, why: "A benefit answers 'so what?' for the user, for example two days without charging." },
+  { q: "'Brushless motor' is a feature of a cordless drill. Which is the BENEFIT?",
+    o: ["It has a motor", "Longer run time and less wear, so fewer repairs", "It is made in a factory", "It has a chuck"],
+    a: 1, why: "The benefit is what the brushless motor gives the user." },
+  { q: "An IMPROVED feature is:",
+    o: ["A feature that is better than in the old model or a competitor's product", "A feature that was removed", "A feature only in the advert", "A feature that costs nothing"],
+    a: 0, why: "For example, a phone camera that works better in low light than last year's model." },
+  { q: "Built-in obsolescence means a product is designed to:",
+    o: ["Last forever", "Be impossible to sell", "Have a limited life, so it is replaced or upgraded", "Use no materials"],
+    a: 2, why: "The product's life is limited by its design, its technology or its style." },
+  { q: "A printer that stops working after a set number of pages, even though it is not broken, is an example of:",
+    o: ["Style obsolescence", "Technological obsolescence", "A USP", "Planned obsolescence"],
+    a: 3, why: "The designer chose to limit its life." },
+  { q: "A phone that cannot run new apps because its processor is too old is an example of:",
+    o: ["Technological obsolescence", "Planned obsolescence", "A benefit", "A focus group"],
+    a: 0, why: "Newer technology has made the old product out of date." },
+  { q: "People replacing a working product because a new colour or shape is in fashion is:",
+    o: ["Functional obsolescence", "Style obsolescence", "Competitor analysis", "Cost benefit analysis"],
+    a: 1, why: "Style (or perceived) obsolescence is about fashion, not function." },
+  { q: "A product with a glued-in battery that cannot be replaced is an example of:",
+    o: ["A USP", "A survey", "Functional obsolescence", "Style obsolescence"],
+    a: 2, why: "When one part wears out, the whole product stops being useful." },
+  { q: "Which design choice REDUCES built-in obsolescence?",
+    o: ["Gluing every part together", "Using special screws nobody can buy", "Stopping software updates after one year", "Modular parts that can be replaced or upgraded"],
+    a: 3, why: "Replaceable modules let users repair or upgrade instead of throwing away." },
+  { q: "Why is built-in obsolescence a problem for the environment?",
+    o: ["It makes products lighter", "It creates more e-waste and uses more materials", "It reduces the price", "It makes products safer"],
+    a: 1, why: "Products thrown away early mean more waste and more new materials." },
+  { q: "Which market research method uses structured questions to collect data from a LARGE group?",
+    o: ["Survey", "Focus group", "SWOT analysis", "Patent search"],
+    a: 0, why: "Surveys reach many people. Focus groups use a small group of about 6 to 10." },
+  { q: "In a SWOT analysis, 'a new government grant for farmers' would be:",
+    o: ["A strength", "A weakness", "A threat", "An opportunity"],
+    a: 3, why: "It is an external condition that could help the product grow." },
+];
+
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0;
+
+function show(id) {
+  ["start", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = QUESTIONS[i];
+  $("bar").style.width = (i / QUESTIONS.length * 100) + "%";
+  $("count").textContent = `Question ${i + 1} of ${QUESTIONS.length}`;
+  $("pts").textContent = `Score: ${score}`;
+  $("question").textContent = item.q;
+  $("fb").className = "feedback";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.o.forEach((text, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.type = "button";
+    b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+    b.querySelector("span").textContent = text;
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = QUESTIONS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score}`;
+  const next = $("next");
+  next.textContent = i === QUESTIONS.length - 1 ? "See my score" : "Next question";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: QUESTIONS.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "Y" : "N").join(""),
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent."; })
+    .catch(() => { el.textContent = "Could not send your score. Show this screen instead."; });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Review the slides on the ones you missed."
+    : "Keep going. Go back over the environment, safety and security slides and try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  answers.forEach((a, n) => {
+    const d = document.createElement("div");
+    d.className = a.ok ? "ok" : "no";
+    d.textContent = `Q${n + 1}: ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    rv.appendChild(d);
+  });
+  show("done");
+  pdmSend();
+}
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt = 1;
+  show("quiz");
+  render();
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("next").addEventListener("click", () => {
+  i++;
+  if (i < QUESTIONS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  i = 0; score = 0; answers = []; t0 = Date.now(); attempt++;
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>
