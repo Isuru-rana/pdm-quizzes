@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Activity: Redesign a Microswitch Bracket</title>
+<meta name="description" content="Unit 3 Product Design and Manufacture in Engineering: one hour revision activity from design triggers to IPR, based on a past Pearson Set Assignment product.">
+<style>
+  :root {
+    --teal: #1f6f78;
+    --teal-dark: #164f56;
+    --orange: #e06c2b;
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #1f2328;
+    --muted: #5d646b;
+    --line: #dcd6cc;
+    --good: #2e7d32;
+    --good-bg: #e7f4e8;
+    --bad: #c62828;
+    --bad-bg: #fbe9e9;
+    --pale: #e6f3f3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; padding: 20px 16px 40px; }
+  header { margin-bottom: 18px; }
+  .unit { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  h1 { font-size: 24px; margin: 4px 0 0; color: var(--teal-dark); }
+  h1 span { color: var(--orange); }
+  h2 { font-size: 19px; color: var(--teal-dark); margin: 18px 0 8px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s; }
+  .meta { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .part {
+    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .03em;
+    color: #fff; background: var(--teal); border-radius: 99px; padding: 4px 12px; margin-bottom: 12px;
+  }
+  .part small { font-weight: 500; opacity: .85; }
+  .q { font-size: 19px; font-weight: 650; margin: 0 0 16px; outline: none; }
+  .ctx { font-size: 15px; color: var(--muted); margin: -8px 0 14px; }
+  .opts { display: grid; gap: 10px; }
+  .opt {
+    display: flex; gap: 12px; align-items: flex-start;
+    width: 100%; text-align: left;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 2px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .opt b {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: var(--bg); color: var(--teal-dark);
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.right { border-color: var(--good); background: var(--good-bg); }
+  .opt.right b { background: var(--good); color: #fff; }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.wrong b { background: var(--bad); color: #fff; }
+  .feedback { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 15px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--good-bg); color: #1b4d1e; }
+  .feedback.bad { background: var(--bad-bg); color: #6d1414; }
+  .feedback strong { display: block; margin-bottom: 2px; }
+  .btn {
+    display: inline-block; margin-top: 18px; width: 100%;
+    font: inherit; font-size: 17px; font-weight: 650;
+    color: #fff; background: var(--teal); border: 0; border-radius: 10px;
+    padding: 14px; cursor: pointer;
+  }
+  .btn:hover { background: var(--teal-dark); }
+  .btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .btn:disabled { background: #9fb7ba; cursor: default; }
+  .btn.ghost { background: transparent; color: var(--teal-dark); border: 2px solid var(--teal); }
+  label { display: block; font-weight: 600; margin: 16px 0 6px; }
+  input[type=text] {
+    width: 100%; font: inherit; font-size: 17px; padding: 12px;
+    border: 2px solid var(--line); border-radius: 10px; background: #fff;
+  }
+  input[type=text]:focus { outline: none; border-color: var(--teal); }
+  .intro p { margin: 0 0 10px; }
+  .plan { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0 4px; }
+  .plan td { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .plan td:last-child { text-align: right; white-space: nowrap; color: var(--muted); }
+  .brief { background: var(--pale); border-radius: 10px; padding: 14px 16px; font-size: 15.5px; }
+  .brief p { margin: 0 0 8px; }
+  .brief ul { margin: 4px 0 0; padding-left: 20px; }
+  .brief li { margin-bottom: 4px; }
+  figure { margin: 14px 0; }
+  figure svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; text-align: center; }
+  .seebrief { font-size: 14px; margin: 0 0 12px; }
+  .seebrief summary { cursor: pointer; color: var(--teal-dark); font-weight: 600; }
+  .seebrief .brief { margin-top: 8px; }
+  .task { font-size: 16px; }
+  .task ul { padding-left: 20px; margin: 8px 0; }
+  .check { display: flex; gap: 10px; align-items: center; font-weight: 600; margin-top: 14px; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: var(--teal); }
+  .model { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: var(--good-bg); color: #1b4d1e; font-size: 15px; display: none; }
+  .model.show { display: block; }
+  .model ul { margin: 6px 0 0; padding-left: 20px; }
+  .model li { margin-bottom: 4px; }
+  .score { text-align: center; }
+  .score .big { font-size: 56px; font-weight: 800; color: var(--teal-dark); line-height: 1; margin: 8px 0; }
+  .score .who { font-size: 18px; font-weight: 650; }
+  .score .time { font-size: 13px; color: var(--muted); }
+  .score .msg { font-size: 17px; margin: 10px 0 4px; }
+  .review { margin-top: 18px; display: grid; gap: 8px; text-align: left; }
+  .review div { font-size: 14px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+  .review .ok { border-left: 4px solid var(--good); }
+  .review .no { border-left: 4px solid var(--bad); }
+  .review .pp { border-left: 4px solid var(--teal); }
+  .hidden { display: none; }
+  footer { margin-top: 18px; font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="unit">Unit 3: Product Design and Manufacture in Engineering</div>
+    <h1>Activity: <span>Redesign a Microswitch Bracket</span></h1>
+  </header>
+
+  <section id="start" class="card intro">
+    <p>Hi everyone. I am running a little late today, so I want you to start this activity on your own while I get there.</p>
+    <p>It brings together everything we have covered so far, from <b>design triggers</b> to <b>IPR</b>, using a real product from a past Pearson assignment. Work on your own. This is an individual activity, not a group task.</p>
+    <p>You will need <b>paper and a pen</b>. Two of the tasks are written by hand, just like Part B of your real assignment, where you cannot use a computer.</p>
+    <table class="plan">
+      <tr><td>Read the client brief</td><td>5 min</td></tr>
+      <tr><td>Part 1: Design triggers</td><td>6 min</td></tr>
+      <tr><td>Part 2: Design challenges</td><td>6 min</td></tr>
+      <tr><td>Part 3: Equipment and system level</td><td>6 min</td></tr>
+      <tr><td>Part 4: Customer, brief and PDS</td><td>7 min</td></tr>
+      <tr><td>Part 5: Protecting your design (IPR)</td><td>7 min</td></tr>
+      <tr><td>Part 6: Write a PDS (paper)</td><td>15 min</td></tr>
+      <tr><td>Part 7: Explain the triggers (paper)</td><td>8 min</td></tr>
+    </table>
+    <p style="margin-top:12px">Your score is sent to me at the end. Keep your paper answers. I will check them when I arrive.</p>
+    <label for="name">Your name</label>
+    <input id="name" type="text" autocomplete="name" placeholder="e.g. Nimal Perera" maxlength="40">
+    <button class="btn" id="go">Start: read the brief</button>
+  </section>
+
+  <section id="briefcard" class="card hidden">
+    <span class="part">The client brief <small>5 min</small></span>
+    <div id="briefbody"></div>
+    <button class="btn" id="tobegin">I have read it. Start Part 1</button>
+  </section>
+
+  <section id="quiz" class="card hidden" aria-live="polite">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="meta"><span id="count"></span><span id="pts"></span></div>
+    <span class="part" id="partname"></span>
+    <details class="seebrief"><summary>Look at the brief again</summary><div id="briefagain"></div></details>
+    <p class="q" id="question" tabindex="-1"></p>
+    <p class="ctx hidden" id="ctx"></p>
+    <div class="opts" id="opts"></div>
+    <div class="task hidden" id="task"></div>
+    <label class="check hidden" id="checkwrap"><input type="checkbox" id="done-paper"> I have written my answer on paper</label>
+    <div class="model" id="model"></div>
+    <div class="feedback" id="fb"></div>
+    <button class="btn hidden" id="reveal" disabled>Show the model answer</button>
+    <button class="btn hidden" id="next">Next</button>
+  </section>
+
+  <section id="done" class="card score hidden">
+    <div class="who" id="who"></div>
+    <div class="big" id="final"></div>
+    <div class="msg" id="msg"></div>
+    <div class="time" id="stamp"></div>
+    <div class="time" id="sent"></div>
+    <div class="review" id="review"></div>
+    <button class="btn ghost" id="again">Try the questions again</button>
+  </section>
+
+  <footer>Based on the bracket for a microswitch from a past Pearson Set Assignment (June 2023). Diagram simplified.</footer>
+</div>
+
+<template id="brieftpl">
+  <div class="brief">
+    <p>You are a <b>manufacturing engineer</b>. Your company uses semi automatic machines to make parts. You have been asked to <b>redesign a bracket for a microswitch</b> on these machines.</p>
+    <p>The bracket stops the moving <b>carriage</b> of the machine at a set point so the next operation can happen. When the carriage hits the <b>rubber stop</b>, it also presses the <b>microswitch</b>, which tells the machine controller to stop the motor.</p>
+    <p>The bracket is <b>aluminium</b>, about 100 mm high, 50 mm wide and 20 mm deep. It bolts to <b>two fixed holes</b> in the machine bed. The machines work in a <b>mildly corrosive</b> environment. Brackets are made in <b>batches of 5</b>.</p>
+    <p><b>Problems reported by the machine operators:</b></p>
+    <ul>
+      <li>the rubber stop does not stop the carriage at the set point</li>
+      <li>the bracket cannot be moved sideways</li>
+      <li>the bracket bends over time</li>
+      <li>the bracket corrodes over time</li>
+    </ul>
+    <p style="margin-top:8px"><b>The new bracket must:</b></p>
+    <ul>
+      <li>fit the original two mounting holes in the machine bed</li>
+      <li>hold the original microswitch</li>
+      <li>absorb the impact of the carriage</li>
+      <li>move up to <b>±30 mm</b> sideways, because the machine now makes parts of different sizes</li>
+      <li>last <b>10,000 hours</b> before it needs replacing</li>
+      <li>be suitable for making in batches of 5</li>
+    </ul>
+  </div>
+  <figure>
+    <svg viewBox="0 0 600 270" role="img" aria-label="Side view: the machine carriage moves towards a bracket bolted to the machine bed. A rubber stop on the bracket faces the carriage and a microswitch sits on top of the bracket.">
+      <rect x="20" y="200" width="560" height="50" fill="#2e8b57"/>
+      <text x="300" y="232" fill="#fff" font-size="20" text-anchor="middle" font-family="system-ui,sans-serif">Machine bed</text>
+      <rect x="40" y="150" width="300" height="34" rx="3" fill="#8a8f96"/>
+      <rect x="70" y="184" width="16" height="16" fill="#b07a2a"/>
+      <rect x="290" y="184" width="16" height="16" fill="#b07a2a"/>
+      <text x="190" y="172" fill="#fff" font-size="20" text-anchor="middle" font-family="system-ui,sans-serif">Machine carriage</text>
+      <line x1="150" y1="130" x2="300" y2="130" stroke="#e06c2b" stroke-width="4"/>
+      <polygon points="300,120 320,130 300,140" fill="#e06c2b"/>
+      <text x="215" y="112" fill="#e06c2b" font-size="20" text-anchor="middle" font-family="system-ui,sans-serif">moves towards the stop</text>
+      <rect x="400" y="80" width="18" height="120" fill="#6d7f99"/>
+      <rect x="400" y="188" width="70" height="12" fill="#6d7f99"/>
+      <circle cx="388" cy="167" r="13" fill="#222"/>
+      <rect x="396" y="58" width="44" height="22" rx="3" fill="#a0896b"/>
+      <line x1="398" y1="64" x2="372" y2="96" stroke="#333" stroke-width="3"/>
+      <circle cx="455" cy="194" r="5" fill="#333"/>
+      <line x1="480" y1="70" x2="440" y2="68" stroke="#555"/>
+      <text x="484" y="74" font-size="20" font-family="system-ui,sans-serif" fill="#333">Microswitch</text>
+      <line x1="480" y1="130" x2="420" y2="130" stroke="#555"/>
+      <text x="484" y="134" font-size="20" font-family="system-ui,sans-serif" fill="#333">Bracket</text>
+      <line x1="372" y1="167" x2="350" y2="110" stroke="#555"/>
+      <text x="330" y="104" font-size="20" font-family="system-ui,sans-serif" fill="#333" text-anchor="end">Rubber stop</text>
+      <line x1="480" y1="180" x2="460" y2="192" stroke="#555"/>
+      <text x="484" y="178" font-size="20" font-family="system-ui,sans-serif" fill="#333">Bolt to bed</text>
+      <text x="300" y="28" font-size="20" font-weight="700" text-anchor="middle" font-family="system-ui,sans-serif" fill="#164f56">Side view (simplified)</text>
+    </svg>
+    <figcaption>The carriage hits the rubber stop. The striker also presses the microswitch.</figcaption>
+  </figure>
+</template>
+
+<script src="../config.js"></script>
+<script>
+const QUIZ_ID = "bracket-activity";
+
+const P1 = "Part 1: Design triggers", P2 = "Part 2: Design challenges", P3 = "Part 3: Equipment and system level",
+      P4 = "Part 4: Customer, brief and PDS", P5 = "Part 5: Protecting your design (IPR)",
+      P6 = "Part 6: Write a PDS", P7 = "Part 7: Explain the triggers";
+
+const ITEMS = [
+  // Part 1: design triggers (A1)
+  { p: P1, q: "Operators say the rubber stop does not stop the carriage at the set point. Which design trigger is this?",
+    o: ["Product performance issue", "Technology push", "Profitability", "Market research"],
+    a: 0, why: "The product is not doing its job properly, so its performance triggers the redesign." },
+  { p: P1, q: "The factory now makes parts of different sizes, so operators need to move the bracket up to ±30 mm. Which trigger is this?",
+    o: ["Technology push: a new technology is available", "Sustainability: cutting the carbon footprint", "Market pull: the users need something new", "Profitability: making more profit per part"],
+    a: 2, why: "The need comes from the users. When a need pulls the design forward, it is market pull." },
+  { p: P1, q: "A supplier launches a small new shock absorber. If the redesign starts only because this new product now exists, the trigger is:",
+    o: ["Market pull", "Technology push", "Designing out risk", "Demand"],
+    a: 1, why: "A new technology pushes the change, even though nobody asked for it. That is technology push." },
+  { p: P1, q: "Bent and corroded brackets are scrapped and replaced often. The company wants to cut the materials and energy this wastes. Which trigger fits best?",
+    o: ["Innovation", "Market research", "Demand", "Sustainability (carbon footprint)"],
+    a: 3, why: "Fewer replacements means less material, less energy and a smaller carbon footprint." },
+  { p: P1, q: "If the carriage goes past the stop, an operator's hand near the bed could be trapped. Changing the design so this cannot happen is:",
+    o: ["Designing out risk", "Profitability", "Technology push", "Market research"],
+    a: 0, why: "Removing a hazard through the design itself is designing out risk." },
+
+  // Part 2: design challenges (A2)
+  { p: P2, q: "Using a thinner but stronger material so the bracket weighs less is the design challenge of:",
+    o: ["Energy recovery features", "Reduction of product mass", "Integration of power sources for vehicles", "Reduction of energy wasted during operation"],
+    a: 1, why: "Making the same part lighter is a reduction of product mass." },
+  { p: P2, q: "A bracket that lasts 10,000 hours, instead of being replaced every few months, mainly gives:",
+    o: ["Reduced product life cycle costs", "Reduction of physical dimensions", "Energy recovery features", "Increase in component efficiency"],
+    a: 0, why: "Fewer replacements, less downtime and less labour lower the cost over the whole life of the product." },
+  { p: P2, q: "Laser cutting brackets from one metal sheet with the parts nested close together, so less metal is wasted, is:",
+    o: ["Designing out risk", "Reduction of energy wasted during operation", "Integration of different power sources", "Reduced use of resources in high value manufacturing"],
+    a: 3, why: "Nesting parts closely uses less raw material for the same output." },
+  { p: P2, q: "Using recycled aluminium and making the bracket easy to recycle at the end of its life deals with:",
+    o: ["Reduction of physical dimensions", "Increase in component efficiency", "Sustainability through the product life cycle", "Energy recovery features"],
+    a: 2, why: "It covers the raw materials stage and the end of life stage of the product life cycle." },
+  { p: P2, q: "Adding a guard so the operator cannot reach between the carriage and the bracket deals with:",
+    o: ["Reduction of product mass", "Designing out risk for employees", "Reduced product life cycle costs", "Energy recovery features"],
+    a: 1, why: "The guard protects the employees who work at the machine." },
+
+  // Part 3: equipment and system level (A3)
+  { p: P3, q: "The bracket bolts to two fixed holes in the machine bed. What kind of interface is this?",
+    o: ["Electrical", "Hydraulic", "Mechanical", "Software"],
+    a: 2, why: "Bolts, holes and physical contact make a mechanical interface." },
+  { p: P3, q: "The microswitch sends a signal to the machine controller through a cable. What kind of interface is this?",
+    o: ["Electrical", "Mechanical", "Hydraulic", "Software"],
+    a: 0, why: "A signal sent through a wire is an electrical interface." },
+  { p: P3, q: "The controller's program decides to stop the motor when the switch closes. What kind of interface is this?",
+    o: ["Hydraulic", "Mechanical", "Electrical", "Software"],
+    a: 3, why: "The decision is made by code in the controller, so it is a software interface." },
+  { p: P3, q: "The controller slows the carriage just before it reaches the stop, so the bracket takes a smaller impact. This is an example of:",
+    o: ["Electromagnetic compatibility (EMC)", "A shortcoming absorbed at system level", "Centre of gravity", "Bonding"],
+    a: 1, why: "The bracket has a weakness, but the wider system (the controller) makes up for it." },
+  { p: P3, q: "The bracket is made in batches of only 5. Which cost should you keep LOW when you choose the manufacturing process?",
+    o: ["The cost of the bracket's paint colour", "The cost of the microswitch", "Tooling and set up cost", "The cost of the machine bed"],
+    a: 2, why: "Expensive moulds or press tools are not worth it for 5 parts. Choose processes with low tooling and set up cost." },
+
+  // Part 4: customer, brief and PDS (A4)
+  { p: P4, q: "You work for the company that owns the machines. To you, the machine operators are:",
+    o: ["External customers", "Competitors", "Suppliers", "Internal customers"],
+    a: 3, why: "They are inside your own organisation, so they are internal customers." },
+  { p: P4, q: "A car company buys the parts that this machine makes. To your company, the car company is:",
+    o: ["An external customer", "An internal customer", "A supplier", "A regulator"],
+    a: 0, why: "They are outside your organisation and pay for your product, so they are an external customer." },
+  { p: P4, q: "Which of these is a measurable PDS line?",
+    o: ["The bracket should be adjustable", "The bracket should be strong", "The bracket can be moved at least ±30 mm sideways", "The bracket should look modern"],
+    a: 2, why: "It has a number, so you can test whether the design meets it." },
+  { p: P4, q: "Under which PDS heading does \"made in batches of 5\" belong?",
+    o: ["Quantity", "Aesthetics", "Finish", "Ergonomics"],
+    a: 0, why: "How many are made is the quantity heading. It also affects manufacturing processes." },
+  { p: P4, q: "\"Must fit the original two mounting holes in the machine bed\" is best described as:",
+    o: ["An opportunity", "A constraint that the design must work within", "A unique selling point", "A trademark"],
+    a: 1, why: "The holes cannot change, so they limit the design. That is a constraint." },
+  { p: P4, q: "What is the difference between the client brief and the PDS?",
+    o: ["They are the same document", "The PDS is written before the brief", "The brief is only for the sales team", "The brief states the need. The PDS turns it into measurable requirements."],
+    a: 3, why: "The client brief says what is needed. The PDS sets the measurable targets that the design is checked against." },
+
+  // Part 5: IPR (A4 commercial protection)
+  { p: P5, ctx: "Your new bracket is finished. Your company wants to protect it.",
+    q: "The new bracket uses a spring and damper mechanism that nobody has made before. Best protection:",
+    o: ["Copyright", "Trademark", "Patent", "Nothing, it is protected automatically"],
+    a: 2, why: "A new invention that works in a new way is protected by a patent, for up to 20 years." },
+  { p: P5, q: "The bracket has a distinctive shape, but the shape does not change how it works. Protect the look with:",
+    o: ["A registered design", "A patent", "A trade secret", "Copyright"],
+    a: 0, why: "A registered design protects how a product looks: its shape and appearance." },
+  { p: P5, q: "Your CAD drawings and the instruction sheet are protected by:",
+    o: ["A trademark", "Copyright, automatically", "A registered design, after you apply", "A patent"],
+    a: 1, why: "Drawings and written work get copyright automatically. You do not need to apply." },
+  { p: P5, q: "The company sells the bracket under the name \"StopSure\" with a logo. Protect the name and logo with:",
+    o: ["A patent", "Copyright", "A registered design", "A trademark"],
+    a: 3, why: "Names and logos that identify a brand are protected by a trademark." },
+  { p: P5, q: "Your company has a special surface treatment recipe that stops corrosion. Nobody can tell the recipe by looking at the bracket. The best choice is:",
+    o: ["Keep it as a trade secret", "Print it on the instruction sheet", "Trademark it", "Do nothing"],
+    a: 0, why: "A patent would publish the recipe. If nobody can work it out from the product, keeping it secret can protect it for longer, like the CocaCola formula." },
+  { p: P5, q: "You want to show the new mechanism at a trade fair next month. What should the company do first?",
+    o: ["Show it first, then patent it later", "Apply for the patent before showing it", "Register a trademark only", "Nothing, the trade fair protects it"],
+    a: 1, why: "A patent needs the invention to be new. If you show it in public first, it may no longer count as new." },
+
+  // Part 6 and 7: paper tasks
+  { p: P6, type: "write", time: "15 min",
+    q: "On paper: write a PDS for the new bracket.",
+    task: "<p>Write <b>at least 8 PDS lines</b>, one under each heading below. Use the brief. Every line must be <b>measurable</b> or checkable: use a number, a limit or a clear test.</p>" +
+          "<ul><li>Performance</li><li>Adjustment</li><li>Fit and interfaces</li><li>Materials</li><li>Life and reliability</li><li>Quantity and manufacturing</li><li>Safety</li><li>Sustainability</li></ul>" +
+          "<p>Example of a weak line: \"The bracket should be strong.\" Make every line better than that.</p>",
+    model: "<b>Model answer (your wording can differ):</b><ul>" +
+           "<li><b>Performance:</b> stops the carriage at the set point and does not bend permanently under the carriage impact.</li>" +
+           "<li><b>Adjustment:</b> can be moved at least ±30 mm sideways and locked in position.</li>" +
+           "<li><b>Fit and interfaces:</b> uses the original two mounting holes and holds the original microswitch with no changes to either.</li>" +
+           "<li><b>Materials:</b> no visible corrosion after 10,000 hours in a mildly corrosive environment.</li>" +
+           "<li><b>Life and reliability:</b> service life of at least 10,000 hours before replacement.</li>" +
+           "<li><b>Quantity and manufacturing:</b> made in batches of 5 using processes with no special tooling.</li>" +
+           "<li><b>Safety:</b> no sharp edges, and no gap between carriage and bracket that a finger can reach.</li>" +
+           "<li><b>Sustainability:</b> made from a recyclable material, with the stop replaceable without replacing the whole bracket.</li>" +
+           "</ul><p style=\"margin-top:8px\">Check yours: does each line have a number, a limit or a test? If not, improve it now.</p>" },
+  { p: P7, type: "write", time: "8 min",
+    q: "On paper: explain two design triggers for this redesign.",
+    task: "<p>For <b>each</b> trigger, write:</p><ul><li>the name of the trigger</li><li>what in the brief shows it</li><li>how your new design will respond to it</li></ul>" +
+          "<p>Then name <b>one design challenge</b> (from Part 2) that the redesign also meets, and say why.</p>",
+    model: "<b>Model answer (your wording can differ):</b><ul>" +
+           "<li><b>Product performance issue:</b> the brief says the stop does not stop the carriage at the set point, and the bracket bends and corrodes. The new design uses a stiffer shape, a corrosion resistant material and a better impact absorber.</li>" +
+           "<li><b>Market pull:</b> the machine now makes parts of different sizes, so users need the bracket to move ±30 mm. The new design uses slotted holes or a sliding base that can be locked.</li>" +
+           "<li><b>Design challenge, reduced product life cycle costs:</b> a bracket that lasts 10,000 hours is replaced less often, so there is less downtime, labour and scrap.</li>" +
+           "</ul>" }
+];
+
+const MC = ITEMS.filter(x => x.type !== "write");
+const $ = id => document.getElementById(id);
+const LETTERS = "ABCD";
+let i = 0, score = 0, name = "", answers = [], t0 = 0, attempt = 0, writes = 0;
+
+function fillBrief(el) { el.innerHTML = ""; el.appendChild($("brieftpl").content.cloneNode(true)); }
+
+function show(id) {
+  ["start", "briefcard", "quiz", "done"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const item = ITEMS[i];
+  const mcBefore = ITEMS.slice(0, i).filter(x => x.type !== "write").length;
+  $("bar").style.width = (i / ITEMS.length * 100) + "%";
+  $("count").textContent = `Step ${i + 1} of ${ITEMS.length}`;
+  $("pts").textContent = `Score: ${score} / ${MC.length}`;
+  $("partname").innerHTML = "";
+  $("partname").append(item.p);
+  if (item.time) { const s = document.createElement("small"); s.textContent = "  " + item.time; $("partname").append(s); }
+  $("question").textContent = item.q;
+  $("ctx").classList.toggle("hidden", !item.ctx);
+  $("ctx").textContent = item.ctx || "";
+  $("fb").className = "feedback";
+  $("model").className = "model";
+  $("next").classList.add("hidden");
+  const box = $("opts");
+  box.innerHTML = "";
+  const isWrite = item.type === "write";
+  $("task").classList.toggle("hidden", !isWrite);
+  $("checkwrap").classList.toggle("hidden", !isWrite);
+  $("reveal").classList.toggle("hidden", !isWrite);
+  if (isWrite) {
+    $("task").innerHTML = item.task;
+    $("model").innerHTML = item.model;
+    $("done-paper").checked = false;
+    $("reveal").disabled = true;
+  } else {
+    item.o.forEach((text, k) => {
+      const b = document.createElement("button");
+      b.className = "opt";
+      b.type = "button";
+      b.innerHTML = `<b>${LETTERS[k]}</b><span></span>`;
+      b.querySelector("span").textContent = text;
+      b.addEventListener("click", () => choose(k));
+      box.appendChild(b);
+    });
+  }
+  $("question").focus({ preventScroll: true });
+}
+
+function choose(k) {
+  const item = ITEMS[i];
+  const btns = [...document.querySelectorAll(".opt")];
+  btns.forEach(b => b.disabled = true);
+  const ok = k === item.a;
+  if (ok) score++;
+  answers.push({ q: item.q, ok, picked: k, right: item.a });
+  btns[item.a].classList.add("right");
+  if (!ok) btns[k].classList.add("wrong");
+  const fb = $("fb");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  fb.innerHTML = `<strong>${ok ? "Correct!" : "Not quite. The answer is " + LETTERS[item.a] + "."}</strong><span></span>`;
+  fb.querySelector("span").textContent = item.why;
+  $("pts").textContent = `Score: ${score} / ${MC.length}`;
+  showNext();
+}
+
+function showNext() {
+  const next = $("next");
+  next.textContent = i === ITEMS.length - 1 ? "See my score" : "Next";
+  next.classList.remove("hidden");
+  next.focus({ preventScroll: true });
+}
+
+function pdmSend() {
+  const url = window.PDM_ENDPOINT, el = $("sent");
+  if (!url) { el.textContent = ""; return; }
+  el.textContent = "Sending your score...";
+  const body = JSON.stringify({
+    quiz: QUIZ_ID, name, score, total: MC.length, attempt,
+    seconds: Math.round((Date.now() - t0) / 1000),
+    marks: answers.map(a => a.ok ? "Y" : "N").join("") + " paper:" + writes + "/2",
+    picked: answers.map(a => LETTERS[a.picked]).join("")
+  });
+  fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
+    .then(() => { el.textContent = "Your score was sent to me."; })
+    .catch(() => { el.textContent = "Could not send your score. Show me this screen instead."; });
+}
+
+function finish() {
+  $("bar").style.width = "100%";
+  $("who").textContent = name || "Your score";
+  $("final").textContent = `${score} / ${MC.length}`;
+  const pct = score / MC.length;
+  $("msg").textContent = pct === 1 ? "Perfect score. Excellent work!"
+    : pct >= .8 ? "Great work. Check the ones you missed below."
+    : pct >= .5 ? "Good effort. Look again at the parts you missed."
+    : "Keep going. Go back over the slides for the parts you missed, then try again.";
+  $("stamp").textContent = "Finished " + new Date().toLocaleString();
+  const rv = $("review");
+  rv.innerHTML = "";
+  let n = 0;
+  ITEMS.forEach(item => {
+    const d = document.createElement("div");
+    if (item.type === "write") {
+      d.className = "pp";
+      d.textContent = `${item.p}: written on paper. Keep it for me to check.`;
+    } else {
+      const a = answers[n++];
+      d.className = a.ok ? "ok" : "no";
+      d.textContent = `Q${n} (${item.p.split(":")[0]}): ${a.ok ? "correct" : "you chose " + LETTERS[a.picked] + ", answer " + LETTERS[a.right]}`;
+    }
+    rv.appendChild(d);
+  });
+  show("done");
+  pdmSend();
+}
+
+function begin() { i = 0; score = 0; answers = []; writes = 0; t0 = Date.now(); attempt++; }
+
+$("go").addEventListener("click", () => {
+  name = $("name").value.trim();
+  if (!name) { $("name").placeholder = "Please type your name first"; $("name").focus(); return; }
+  begin();
+  fillBrief($("briefbody"));
+  show("briefcard");
+});
+$("name").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); $("go").click(); }
+});
+$("tobegin").addEventListener("click", () => {
+  fillBrief($("briefagain"));
+  show("quiz");
+  render();
+});
+$("done-paper").addEventListener("change", e => { $("reveal").disabled = !e.target.checked; });
+$("reveal").addEventListener("click", () => {
+  writes++;
+  $("model").classList.add("show");
+  $("reveal").classList.add("hidden");
+  $("done-paper").disabled = true;
+  showNext();
+});
+$("next").addEventListener("click", () => {
+  $("done-paper").disabled = false;
+  i++;
+  if (i < ITEMS.length) render(); else finish();
+});
+$("again").addEventListener("click", () => {
+  begin();
+  show("quiz");
+  render();
+});
+</script>
+</body>
+</html>
