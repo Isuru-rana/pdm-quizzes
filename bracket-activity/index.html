@@ -141,14 +141,14 @@
   <section id="start" class="card intro">
     <p>Hi everyone. I am running a little late today, so I want you to start this activity on your own while I get there.</p>
     <p>It brings together everything we have covered so far, from <b>design triggers</b> to <b>IPR</b>, using a real product from a past Pearson assignment. Work on your own. This is an individual activity, not a group task.</p>
-    <p>You will need <b>paper and a pen</b>. Two of the tasks are written by hand, just like Part B of your real assignment, where you cannot use a computer.</p>
+    <p>You will need <b>paper and a pen</b>. Four of the tasks are written by hand, just like Part B of your real assignment, where you cannot use a computer.</p>
     <table class="plan">
       <tr><td>Read the client brief</td><td>5 min</td></tr>
-      <tr><td>Part 1: Design triggers</td><td>6 min</td></tr>
-      <tr><td>Part 2: Design challenges</td><td>6 min</td></tr>
-      <tr><td>Part 3: Equipment and system level</td><td>6 min</td></tr>
-      <tr><td>Part 4: Customer, brief and PDS</td><td>7 min</td></tr>
-      <tr><td>Part 5: Protecting your design (IPR)</td><td>7 min</td></tr>
+      <tr><td>Part 1: Design triggers</td><td>3 min</td></tr>
+      <tr><td>Part 2: Design challenges</td><td>3 min</td></tr>
+      <tr><td>Part 3: Equipment and system level, then a paper task</td><td>10 min</td></tr>
+      <tr><td>Part 4: Customer, brief and PDS</td><td>4 min</td></tr>
+      <tr><td>Part 5: Protecting your design (IPR), then a paper task</td><td>12 min</td></tr>
       <tr><td>Part 6: Write a PDS (paper)</td><td>15 min</td></tr>
       <tr><td>Part 7: Explain the triggers (paper)</td><td>8 min</td></tr>
     </table>
@@ -305,6 +305,18 @@ const ITEMS = [
   { p: P3, q: "The bracket is made in batches of only 5. Which cost should you keep LOW when you choose the manufacturing process?",
     o: ["The cost of the bracket's paint colour", "The cost of the microswitch", "Tooling and set up cost", "The cost of the machine bed"],
     a: 2, why: "Expensive moulds or press tools are not worth it for 5 parts. Choose processes with low tooling and set up cost." },
+  { p: P3, type: "write", time: "7 min",
+    q: "On paper: the bracket's interfaces.",
+    task: "<p>The bracket connects to the rest of the machine in three ways. For <b>each</b> interface below, write:</p>" +
+          "<ul><li><b>what</b> it connects to</li><li><b>one way it limits</b> your redesign</li></ul>" +
+          "<ul><li>Mechanical</li><li>Electrical</li><li>Software</li></ul>" +
+          "<p>Then write one sentence: how could the <b>system</b> (the rest of the machine) help make up for a weakness in the bracket?</p>",
+    model: "<b>Model answer (your wording can differ):</b><ul>" +
+           "<li><b>Mechanical:</b> bolts to the two fixed holes in the machine bed and is hit by the carriage. The holes cannot move, so any sideways adjustment must be built into the bracket itself, for example slotted holes.</li>" +
+           "<li><b>Electrical:</b> the microswitch cable goes to the controller. The new bracket must leave room for the cable and must not pinch or rub it as the bracket is adjusted.</li>" +
+           "<li><b>Software:</b> the controller stops the motor when the switch closes. The switch must be pressed at the same point every time, so the bracket must hold the switch rigidly and not bend.</li>" +
+           "<li><b>System level:</b> the controller can slow the carriage before the stop, so the bracket takes a smaller impact.</li>" +
+           "</ul>" },
 
   // Part 4: customer, brief and PDS (A4)
   { p: P4, q: "You work for the company that owns the machines. To you, the machine operators are:",
@@ -346,6 +358,19 @@ const ITEMS = [
   { p: P5, q: "You want to show the new mechanism at a trade fair next month. What should the company do first?",
     o: ["Show it first, then patent it later", "Apply for the patent before showing it", "Register a trademark only", "Nothing, the trade fair protects it"],
     a: 1, why: "A patent needs the invention to be new. If you show it in public first, it may no longer count as new." },
+  { p: P5, type: "write", time: "8 min",
+    q: "On paper: an IPR plan for the StopSure bracket.",
+    task: "<p>Copy this table onto paper and fill it in. Use what you learned in the IPR lesson.</p>" +
+          "<ul><li>The new spring and damper mechanism</li><li>The distinctive shape</li><li>The name StopSure and its logo</li><li>The CAD drawings and instruction sheet</li><li>The secret surface treatment recipe</li></ul>" +
+          "<p>Columns: <b>Item</b> | <b>Type of IPR</b> | <b>How you get it</b> | <b>How long it lasts</b></p>" +
+          "<p>Then answer: should the company patent the surface treatment or keep it secret? Give one reason.</p>",
+    model: "<b>Model answer:</b><ul>" +
+           "<li><b>Mechanism:</b> patent. Apply, and it must be new. Up to 20 years.</li>" +
+           "<li><b>Shape:</b> registered design. Apply and register. Up to 25 years in the UK, 15 years in Sri Lanka.</li>" +
+           "<li><b>Name and logo:</b> trademark. Apply and register. 10 years, and can be renewed again and again.</li>" +
+           "<li><b>Drawings and instructions:</b> copyright. Automatic. The creator's life plus 70 years.</li>" +
+           "<li><b>Surface treatment:</b> trade secret. Keep it secret and use NDAs. Lasts as long as it stays secret.</li>" +
+           "</ul><p style=\"margin-top:8px\"><b>Keep it secret:</b> a patent would publish the recipe and end after 20 years. Nobody can work out the recipe by looking at the bracket.</p>" },
 
   // Part 6 and 7: paper tasks
   { p: P6, type: "write", time: "15 min",
@@ -457,7 +482,7 @@ function pdmSend() {
   const body = JSON.stringify({
     quiz: QUIZ_ID, name, score, total: MC.length, attempt,
     seconds: Math.round((Date.now() - t0) / 1000),
-    marks: answers.map(a => a.ok ? "Y" : "N").join("") + " paper:" + writes + "/2",
+    marks: answers.map(a => a.ok ? "Y" : "N").join("") + " paper:" + writes + "/4",
     picked: answers.map(a => LETTERS[a.picked]).join("")
   });
   fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body })
